@@ -20,7 +20,7 @@ jobs:
       # check if have a diff
       - name: Run format code with uv
         run: |
-          uv run ruff format .
+          uv tool run ruff format .
 
       # check diff
       - name: Check diff
