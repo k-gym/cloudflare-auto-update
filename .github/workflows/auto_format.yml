@@ -25,21 +25,22 @@ jobs:
       # check diff
       - name: Check diff
         id: is_diff
+        continue-on-error: true
         run: |
           # show diff
           git diff --exit-code
           if [ $? -eq 0 ]; then
             echo "No changes to the output"
             # set output variable
-            echo "::set-output name=is_diff::false"
+            echo "is_diff=false" >> $GITHUB_ENV
           else
             echo "Changes detected"
-            echo "::set-output name=is_diff::true"
+            echo "is_diff=true" >> $GITHUB_ENV
           fi
 
       # commit changes
       - name: Commit changes
-        if: steps.is_diff.outputs.is_diff == 'true'
+        if: env.is_diff == 'true'
         run: |
           git config --local user.email "auto_format@kgym.com"
           git config --local user.name "auto_format"
