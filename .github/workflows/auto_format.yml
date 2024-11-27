@@ -30,15 +30,16 @@ jobs:
           git diff --exit-code
           if [ $? -eq 0 ]; then
             echo "No changes to the output"
-            exit 0
+            # set output variable
+            echo "::set-output name=is_diff::false"
           else
             echo "Changes detected"
-            exit 1
+            echo "::set-output name=is_diff::true"
           fi
 
       # commit changes
       - name: Commit changes
-        if: steps.is_diff.outcome == 'failure'
+        if: steps.is_diff.outputs.is_diff == 'true'
         run: |
           git config --local user.email "auto_format@kgym.com"
           git config --local user.name "auto_format"
